@@ -1,4 +1,7 @@
 @echo off
+:: Switch to the directory where this .bat file is located
+cd /d %~dp0
+
 echo ===========================
 echo Installing dependencies...
 echo ===========================
@@ -12,14 +15,14 @@ python parcer.py
 echo ===========================
 echo Launching Telegram bot...
 echo ===========================
-start cmd /k "python bot.py"
+start cmd /k "cd /d %~dp0 && python bot.py"
 
 timeout /t 2 >nul
 
 echo ===========================
 echo Launching notifier...
 echo ===========================
-start cmd /k "python notifier.py"
+start cmd /k "cd /d %~dp0 && python notifier.py"
 
 echo ===========================
 echo All systems started successfully.
