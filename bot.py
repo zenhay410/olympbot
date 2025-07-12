@@ -3,12 +3,10 @@ from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeybo
 from datetime import datetime
 import json
 
-TOKEN = "7807718978:AAEE4pDJSrnDHHDh8uW4mPoumCaMwBoYq_s"
+TOKEN = "///TOKEn///"
 bot = telebot.TeleBot(TOKEN)
 
 ITEMS_PER_PAGE = 5
-
-# === БАЗА ДАННЫХ ===
 
 def load_json(path):
     try:
@@ -34,8 +32,6 @@ def ensure_user(uid):
         }
         save_json(users, "users.json")
 
-# === ГЛАВНОЕ МЕНЮ ===
-
 def main_menu():
     kb = ReplyKeyboardMarkup(resize_keyboard=True)
     kb.row("📋 Список олимпиад", "📌 Мои подписки")
@@ -58,8 +54,6 @@ def help_cmd(m):
         "📌 Мои подписки — список и отписка\n"
         "⚙️ Настройки — напоминание"
     )
-
-# === СПИСОК ОЛИМПИАД ПО СТРАНИЦАМ ===
 
 def get_olympiad_page(page, action="none"):
     olympiads = load_json("olympiads.json")
@@ -94,8 +88,6 @@ def show_list(m):
     text, kb = get_olympiad_page(0, action="none")
     bot.send_message(m.chat.id, text, reply_markup=kb)
 
-# === ПОДПИСКА ===
-
 @bot.message_handler(func=lambda m: m.text == "🔔 Подписаться")
 def show_subscribe_menu(m):
     ensure_user(str(m.chat.id))
@@ -115,8 +107,6 @@ def handle_subscribe(call):
         bot.answer_callback_query(call.id, f"✅ Подписка на {oid} оформлена!")
     else:
         bot.answer_callback_query(call.id, "Вы уже подписаны.")
-
-# === МОИ ПОДПИСКИ + ОТПИСКА ===
 
 @bot.message_handler(func=lambda m: m.text == "📌 Мои подписки")
 def show_my_subs(m):
@@ -153,8 +143,6 @@ def handle_unsubscribe(call):
     else:
         bot.answer_callback_query(call.id, "Вы не были подписаны.")
 
-# === НАВИГАЦИЯ ПАГИНАЦИИ ===
-
 @bot.callback_query_handler(func=lambda call: call.data.startswith("page:"))
 def handle_page_nav(call):
     _, action, page = call.data.split(":")
@@ -166,8 +154,6 @@ def handle_page_nav(call):
         text=text,
         reply_markup=kb
     )
-
-# === НАСТРОЙКИ УВЕДОМЛЕНИЙ ===
 
 @bot.message_handler(func=lambda m: m.text == "⚙️ Настройки")
 def show_settings_hint(m):
